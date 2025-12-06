@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>倒數天數與每日激勵語</title>
+<style>
+body {
+  font-family: "Noto Sans TC", sans-serif;
+  background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+  color: #333;
+  text-align: center;
+  padding: 40px;
+  transition: background 1s;
+}
+h1 {
+  font-size: 2.2em;
+  margin-bottom: 20px;
+}
+#countdown {
+  font-size: 4em;
+  font-weight: bold;
+  margin: 20px 0;
+  color: #2b2b2b;
+}
+#quote {
+  font-size: 1.4em;
+  margin-top: 30px;
+  font-style: italic;
+  color: #444;
+}
+input[type="date"] {
+  padding: 10px;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+  margin: 10px;
+}
+button {
+  padding: 10px 20px;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+  background-color: #4a90e2;
+  color: white;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #357ab8;
+}
+footer {
+  margin-top: 50px;
+  font-size: 0.9em;
+  color: #666;
+}
+</style>
+</head>
+<body>
+<h1>倒數天數與每日激勵語</h1>
+<p>設定目標日期：</p>
+<input type="date" id="targetDate">
+<button onclick="startCountdown()">開始倒數</button>
+<div id="countdown"></div>
+<div id="quote"></div>
+<footer>© 2025 倒數激勵網頁</footer>
+
+<script>
+const quotes = [
+  "每一步都算數，別小看今天的努力。",
+  "離夢想更近的那一天，就是今天。",
+  "堅持不一定馬上看到結果，但放棄一定看不到希望。",
+  "你不是在等時間，而是在創造改變。",
+  "今天的努力，是明天的禮物。",
+  "相信自己，未來會感謝現在的你。",
+  "再小的進步，也是前進。",
+  "別讓昨天的失敗，影響今天的勇氣。",
+  "夢想不會自己實現，但努力會讓它靠近。",
+  "每個清晨都是新的開始。"
+];
+
+function startCountdown() {
+  const targetInput = document.getElementById("targetDate").value;
+  if (!targetInput) {
+    alert("請先選擇日期！");
+    return;
+  }
+  localStorage.setItem("targetDate", targetInput);
+  updateCountdown();
+}
+
+function updateCountdown() {
+  const targetInput = localStorage.getItem("targetDate");
+  if (!targetInput) return;
+  const targetDate = new Date(targetInput);
+  const today = new Date();
+  const diffTime = targetDate - today;
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  const countdownEl = document.getElementById("countdown");
+  if (diffDays > 0) {
+    countdownEl.textContent = `倒數 ${diffDays} 天`;
+  } else if (diffDays === 0) {
+    countdownEl.textContent = "今天就是目標日！";
+  } else {
+    countdownEl.textContent = `已超過 ${Math.abs(diffDays)} 天`;
+  }
+  showDailyQuote();
+}
+
+function showDailyQuote() {
+  const today = new Date();
+  const dayIndex = today.getDate() % quotes.length;
+  document.getElementById("quote").textContent = quotes[dayIndex];
+}
+
+window.onload = updateCountdown;
+</script>
+</body>
+</html>
